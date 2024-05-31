@@ -1,0 +1,60 @@
+﻿@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+
+<div id="login">
+    <div class="container">
+        <div id="login-row" class="row justify-content-center align-items-center">
+            <div id="login-column" class="col-md-6">
+                <div id="login-box" class="col-md-12">
+                    <form id="login-form" name="login-form" class="form" asp-controller="Account" asp-action="Login" asp-route-ReturnUrl="@Model.ReturnUrl" method="post">
+                        <h3 class="text-center text-info">Login</h3>
+
+                        <div asp-validation-summary="All" class="style-msg2 errormsg">
+                            <div class="alert-danger"><i class="icon-warning-sign"></i>Please Fix the Following Errors</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Email"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Password"></label>
+                            <input asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-12 col-lg-6">
+                                <input asp-for="RememberMe" class="checkbox-style" />
+                                <label asp-for="RememberMe" class="checkbox-style-3-label checkbox-small"></label>
+                            </div>
+
+                            <div class="col-md-12 col-lg-6 text-right">
+                                <button class="btn btn-info btn-md" id="login-form-submit" name="login-form-submit" value="login" type="submit"><span class="fa fa-sign-in mr-2"></span>Login</button>
+                            </div>
+
+                        </div>
+
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        @if (ViewBag.JavaScriptFunction != null)
+    {
+    @Html.Raw(ViewBag.JavaScriptFunction)
+    }
+    </script>
+}

@@ -1,0 +1,137 @@
+﻿@model HomeVM
+@inject SignInManager<ApplicationUser> signInManager;
+
+@{
+    ViewData["Title"] = User.Identity.Name+" Home Page";
+}
+
+@section Styles{
+    <style>
+
+        .cardH {
+            min-height: 180px;
+        }
+    </style>
+}
+<div class="container">
+    <input asp-for="IsAdmin" hidden>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            Search
+        </div>
+        <div class="card-body">
+
+            <div class="row clearfix">
+
+                <div class="col-md-3 col-sm-12">
+                    <label for="txtSearchSongTitle" class="d-block">Song Title</label>
+                    <input id="txtSearchSongTitle" class="form-control" placeholder="Search eg: Billie Jean" />
+                </div>
+
+                <div class="col-md-2 col-sm-6">
+                    <label for="ddlArtist">Artist</label>
+                    <select id="ddlArtist" class="selectpicker form-control" data-size="6" data-placeholder="All Artist" style="width:100%; line-height: 30px;">
+                        <option value="0">All Artist</option>
+
+                        @{
+                            foreach (var artist in Model.Artists)
+                            {
+                                @Html.Raw("<option value='" + artist.ArtistId + "'>" + artist.ArtistName + "</option>");
+                            }
+
+                        }
+
+                    </select>
+                </div>
+
+                <div class="col-md-2 col-sm-6">
+                    <label for="ddlGenre">Genre</label>
+                    <select id="ddlGenre" class="selectpicker form-control" data-size="6" data-placeholder="All Genre" style="width:100%; line-height: 30px;">
+                        <option value="0">All Genre</option>
+
+                        @{
+                            foreach (var genre in Model.Genres)
+                            {
+                                @Html.Raw("<option value='" + genre.GenreId + "'>" + genre.GenreName + "</option>");
+                            }
+
+                        }
+
+                    </select>
+                </div>
+
+                <div class="col-md-2 col-sm-6">
+                    <label for="ddlYear">Year</label>
+                    <select id="ddlYear" class="selectpicker form-control" data-size="6" data-placeholder="All Year" style="width:100%; line-height: 30px;">
+                        <option value="0">All Years</option>
+
+                        @{
+                            foreach (short? year in Model.YearRecorded)
+                            {
+                                if (year != null && year > 0)
+                                {
+                                    @Html.Raw("<option value='" + year + "'>" + year + "</option>");
+                                }
+                            }
+
+                        }
+
+                    </select>
+                </div>
+
+                <div class="col-md-2 col-sm-6 col-6">
+                    <a class="btn btn-light btn-rounded btn-block nomargin center" onclick="SearchSong()" style="margin-top: 29px !important; cursor: pointer;">Search</a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div id="searchResults" class="row">
+
+        <div id="progress" class="col-12 text-center" style="display:none">
+            <h4>Loading...</h4>
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts{
+    <script>
+
+        @{ if (Model.IsAdmin)
+            {
+                @Html.Raw("var _isAdmin = true;");
+            }
+            else
+            {
+                @Html.Raw("var _isAdmin = false;");
+            }
+           }
+
+        $(function () {
+
+            GetSongData(true, null, 0, 0,0);
+
+            $(window).scroll(function () {
+
+                var hT = $('#searchResults').offset().top,
+                    hH = $('#searchResults').outerHeight(),
+                    wH = $(window).height(),
+                    wS = $(this).scrollTop();
+
+                if (!_incallback && !_EOTL) {
+                    if (wS > (hT + hH - wH)) {
+                        _incallback = true;
+                        GetSongData(false);
+                    }
+                }
+
+            });
+        });
+
+    </script>
+}

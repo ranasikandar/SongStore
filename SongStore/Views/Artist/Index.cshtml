@@ -1,0 +1,90 @@
+﻿@model ArtistVM
+@{
+    ViewData["Title"] = "Artists";
+}
+@section Styles{
+    <style>
+
+        .cPoint {
+            cursor: pointer;
+        }
+        </style>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+}
+
+<input asp-for="Id" hidden>
+
+<div class="container mt-5">
+    <div class="form-group">
+        <h5>Add Update Search Artist</h5>
+        <form id="ArtistDetail" class="col-12 mb-4" asp-controller="Artist" asp-action="Index" method="post">
+            <div class="form-row align-items-center">
+                <div class="col-xs-12 col-lg-9">
+                    <label asp-for="ArtistName"></label>
+                    <input asp-for="ArtistName" class="form-control">
+                    <span asp-validation-for="ArtistName" class="text-danger"></span>
+                </div>
+                <div class="col-xs-12 col-lg-3 mt-4">
+                    <button class="btn btn-outline-info btn-lg" id="form-submit" name="form-submit" value="submit" type="submit">Save Artist</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <hr>
+    <table id="artistsTbl" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{ foreach (Artist artist in Model.ArtistList)
+                {
+                    @Html.Raw("<tr><td>" + artist.ArtistName + "</td><td><a class='btn btn-info btn-sm' href='/Artist/Index/" + artist.ArtistId + "'>Edit</a></td><td><a class='btn btn-danger btn-sm cPoint' onclick='delArtistFn(" + artist.ArtistId + ")'>Delete</a></td></tr>");
+                }}
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Name</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+@section Scripts{
+
+    @*<script src="https://code.jquery.com/jquery-3.5.1.js"></script>*@
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+    <script>
+
+
+        @if (ViewBag.JavaScriptFunction != null)
+        {
+        @Html.Raw(ViewBag.JavaScriptFunction)
+        }
+
+        //$(function () {
+
+        //});
+
+        $(document).ready(function () {
+            $('#artistsTbl').DataTable(
+                {
+                    "columns": [
+                        { "width": "80%" },
+                        { "width": "10%" },
+                        { "width": "10%" }
+                    ]
+                }
+            );
+        });
+
+    </script>
+}
